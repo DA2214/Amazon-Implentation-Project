@@ -179,16 +179,17 @@ int main(int argc, char* argv[]) {
     return 0;
 }
 
-void displayProducts(vector<Product*>& hits) {
+void displayProducts(vector<Product*>& hits)
+{
     int resultNo = 1;
-    if (hits.empty()) {
-        cout << "No results found!" << endl;
-        return;
+    if (hits.begin() == hits.end()) {
+    	cout << "No results found!" << endl;
+    	return;
     }
     std::sort(hits.begin(), hits.end(), ProdNameSorter());
-    for (auto* product : hits) {
+    for(vector<Product*>::iterator it = hits.begin(); it != hits.end(); ++it) {
         cout << "Hit " << setw(3) << resultNo << endl;
-        cout << product->displayString() << endl;
+        cout << (*it)->displayString() << endl;
         cout << endl;
         resultNo++;
     }
