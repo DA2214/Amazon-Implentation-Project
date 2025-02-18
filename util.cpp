@@ -2,6 +2,7 @@
 #include <sstream>
 #include <cctype>
 #include <algorithm>
+#include <functional>
 #include "util.h"
 
 using namespace std;
@@ -15,16 +16,25 @@ std::string convToLower(std::string src)
     to a set of words based on the criteria given in the assignment **/
 std::set<std::string> parseStringToWords(string rawWords)
 {
-
-
-
-
-
-
-
-
-
-
+    set<string> words;
+    string word;
+    for (unsigned int i = 0; i < rawWords.size(); i++) {
+        if (ispunct(rawWords[i]) || isspace(rawWords[i])) {
+            if (word.size() >= 2) {
+                word = convToLower(word);
+                words.insert(word);
+            }
+            word = "";
+        } else {
+            word += rawWords[i];
+        }
+    }
+    
+    if (word.size() >= 2) {
+        word = convToLower(word);
+        words.insert(word);
+    }
+    return words;
 }
 
 /**************************************************
@@ -35,19 +45,13 @@ std::set<std::string> parseStringToWords(string rawWords)
 // trim from start
 std::string &ltrim(std::string &s) {
     s.erase(s.begin(), 
-	    std::find_if(s.begin(), 
-			 s.end(), 
-			 std::not1(std::ptr_fun<int, int>(std::isspace))));
+            std::find_if(s.begin(), s.end(), [](unsigned char ch) { return !std::isspace(ch); }));
     return s;
 }
 
-// trim from end
 std::string &rtrim(std::string &s) {
-    s.erase(
-	    std::find_if(s.rbegin(), 
-			 s.rend(), 
-			 std::not1(std::ptr_fun<int, int>(std::isspace))).base(), 
-	    s.end());
+    s.erase(std::find_if(s.rbegin(), s.rend(), [](unsigned char ch) { return !std::isspace(ch); }).base(), 
+            s.end());
     return s;
 }
 
